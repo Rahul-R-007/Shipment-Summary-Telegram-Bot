@@ -3,6 +3,7 @@ import tempfile
 import asyncio
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
+from database import save_pdf
 
 # OCR and PDF libraries
 import pytesseract
@@ -111,6 +112,14 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(
                 header + chunk, parse_mode="Markdown"
             )
+
+            pdf_id = save_pdf(
+                chat_id=update.effective_chat.id,
+                message_id=update.message.message_id,
+                file_name=doc.file_name,
+                raw_text=extracted
+            )
+            print(f"Saved PDF with ID {pdf_id}")
 
     except Exception as e:
         await update.message.reply_text(f"❌ Error processing file: {e}")

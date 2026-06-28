@@ -10,8 +10,6 @@ db = mysql.connector.connect(
 
 cursor = db.cursor()
 
-print("Connected to MySQL successfully!")
-
 def save_pdf(chat_id, message_id, file_name, raw_text):
     sql = """
     INSERT INTO pdf_data (
